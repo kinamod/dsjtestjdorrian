@@ -1,5 +1,5 @@
 {
   "domain": "travel0-dsj.eu.auth0.com",
   "clientId": "K4QdLcWierXZFDjfloIOVAKA9KGb7jqI",
-  "audience": "YOUR_API_IDENTIFIER"
+  "audience": "https://travel0-dsj.eu.auth0.com/api/v2/"
 }
