@@ -1,12 +1,13 @@
 import React, { useState } from "react";
-import { Button, Alert } from "reactstrap";
+import { Button, Alert, Container, Row, Col } from "reactstrap";
 import Highlight from "../components/Highlight";
 import { useAuth0, withAuthenticationRequired } from "@auth0/auth0-react";
 import { getConfig } from "../config";
 import Loading from "../components/Loading";
 
 export const ExternalApiComponent = () => {
-  const { apiOrigin = "http://localhost:3001", audience } = getConfig();
+
+  const { apiOrigin = "http://localhost:3001" || process.env.apiOrigin, audience } = getConfig();
 
   const [state, setState] = useState({
     showResult: false,
@@ -54,11 +55,13 @@ export const ExternalApiComponent = () => {
     await callApi();
   };
 
-  const callApi = async () => {
+  const callApi = async (orgID, apiNo) => {
     try {
+      const apiURL = `${apiOrigin}/api/${apiNo}?organizationID=${orgID}`;
       const token = await getAccessTokenSilently();
 
-      const response = await fetch(`${apiOrigin}/api/external`, {
+      // const response = await fetch(`${apiOrigin}/api/external`, {
+      const response = await fetch(`${apiURL}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -66,6 +69,10 @@ export const ExternalApiComponent = () => {
 
       const responseData = await response.json();
 
+      setState({
+        ...state,
+        showResult: false
+      });
       setState({
         ...state,
         showResult: true,
@@ -170,27 +177,88 @@ export const ExternalApiComponent = () => {
             </p>
           </Alert>
         )}
-
-        <Button
-          color="primary"
-          className="mt-5"
-          onClick={callApi}
-          disabled={!audience}
-        >
-          Ping API
-        </Button>
       </div>
+      <Container>
+        <Row>
+          {/* Council One Section */}
+          <Col>
+            <div style={{ backgroundColor: "lightblue" }}>
+              Council One - ID: 1234
+              <Button
+                color="primary"
+                className="mt-5"
+                onClick={() => callApi(1234, 1)}
+                disabled={!audience}
+              >
+                Ping API 1
+              </Button>
+              <Button
+                color="primary"
+                className="mt-5"
+                onClick={() => callApi(1234, 2)}
+                disabled={!audience}
+              >
+                Ping API 2
+              </Button>
+              <Button
+                color="primary"
+                className="mt-5"
+                onClick={() => callApi(1234, 3)}
+                disabled={!audience}
+              >
+                Ping API 3
+              </Button>
+            </div>
+          </Col>
+          {/* END Council One Section */}
+          {/* Council Two Section */}
+          <Col>
+            <div style={{ backgroundColor: "lightgreen" }}>
+              Council Two - ID: 5678
+              <Button
+                color="primary"
+                className="mt-5"
+                onClick={() => callApi(5678, 1)}
+                disabled={!audience}
+              >
+                Ping API 1
+              </Button>
+              <Button
+                color="primary"
+                className="mt-5"
+                onClick={() => callApi(5678, 2)}
+                disabled={!audience}
+              >
+                Ping API 2
+              </Button>
+              <Button
+                color="primary"
+                className="mt-5"
+                onClick={() => callApi(5678, 3)}
+                disabled={!audience}
+              >
+                Ping API 3
+              </Button>
+            </div>
+          </Col>
+          {/* END Council Two Section */}
+        </Row>
 
-      <div className="result-block-container">
-        {state.showResult && (
-          <div className="result-block" data-testid="api-result">
-            <h6 className="muted">Result</h6>
-            <Highlight>
-              <span>{JSON.stringify(state.apiMessage, null, 2)}</span>
-            </Highlight>
-          </div>
-        )}
-      </div>
+        <Row>
+          <Col>
+            <div className="result-block-container">
+              {state.showResult && (
+                <div className="result-block" data-testid="api-result">
+                  <h6 className="muted">Result</h6>
+                  <Highlight>
+                    <span>{JSON.stringify(state.apiMessage, null, 2)}</span>
+                  </Highlight>
+                </div>
+              )}
+            </div>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };

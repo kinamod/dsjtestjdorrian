@@ -10,7 +10,7 @@ const app = express();
 
 const port = process.env.API_PORT || 3001;
 const appPort = process.env.SERVER_PORT || 3000;
-const appOrigin = authConfig.appOrigin || `http://localhost:${appPort}`;
+const appOrigin = authConfig.appOrigin || process.env.appOrigin || `http://localhost:${appPort}`;
 
 if (
   !authConfig.domain ||
@@ -44,6 +44,24 @@ const checkJwt = jwt({
 app.get("/api/external", checkJwt, (req, res) => {
   res.send({
     msg: "Your access token was successfully validated!",
+  });
+});
+
+app.get("/api/1", checkJwt, (req, res) => {
+  res.send({
+    msg: "1 - Your access token was successfully validated! - " + req.query.organizationID,
+  });
+});
+
+app.get("/api/2", checkJwt, (req, res) => {
+  res.send({
+    msg: "2 - Your access token was successfully validated! - " + req.query.organizationID,
+  });
+});
+
+app.get("/api/3", checkJwt, (req, res) => {
+  res.send({
+    msg: "3 - Your access token was successfully validated! - " + req.query.organizationID,
   });
 });
 
