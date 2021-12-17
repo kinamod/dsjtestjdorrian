@@ -59,7 +59,7 @@ export const ExternalApiComponent = () => {
     try {
       const apiURL = `${apiOrigin}/api/${apiNo}?organizationID=${orgID}`;
       const token = await getAccessTokenSilently();
-
+      console.log("token - " + token)
       // const response = await fetch(`${apiOrigin}/api/external`, {
       const response = await fetch(`${apiURL}`, {
         headers: {
@@ -187,7 +187,7 @@ export const ExternalApiComponent = () => {
               <Button
                 color="primary"
                 className="mt-5"
-                onClick={() => callApi(1234, 1)}
+                onClick={() => callApi('org_6f1GDxfX7TTP61md', 1)}
                 disabled={!audience}
               >
                 Ping API 1
@@ -195,7 +195,7 @@ export const ExternalApiComponent = () => {
               <Button
                 color="primary"
                 className="mt-5"
-                onClick={() => callApi(1234, 2)}
+                onClick={() => callApi('org_6f1GDxfX7TTP61md', 2)}
                 disabled={!audience}
               >
                 Ping API 2
@@ -203,7 +203,7 @@ export const ExternalApiComponent = () => {
               <Button
                 color="primary"
                 className="mt-5"
-                onClick={() => callApi(1234, 3)}
+                onClick={() => callApi('org_6f1GDxfX7TTP61md', 3)}
                 disabled={!audience}
               >
                 Ping API 3
@@ -218,7 +218,7 @@ export const ExternalApiComponent = () => {
               <Button
                 color="primary"
                 className="mt-5"
-                onClick={() => callApi(5678, 1)}
+                onClick={() => callApi('org_Bu6HEhxNcalm5Yut', 1)}
                 disabled={!audience}
               >
                 Ping API 1
@@ -226,7 +226,7 @@ export const ExternalApiComponent = () => {
               <Button
                 color="primary"
                 className="mt-5"
-                onClick={() => callApi(5678, 2)}
+                onClick={() => callApi('org_Bu6HEhxNcalm5Yut', 2)}
                 disabled={!audience}
               >
                 Ping API 2
@@ -234,7 +234,7 @@ export const ExternalApiComponent = () => {
               <Button
                 color="primary"
                 className="mt-5"
-                onClick={() => callApi(5678, 3)}
+                onClick={() => callApi('org_Bu6HEhxNcalm5Yut', 3)}
                 disabled={!audience}
               >
                 Ping API 3

@@ -28,6 +28,8 @@ app.use(morgan("dev"));
 app.use(helmet());
 app.use(cors({ origin: appOrigin }));
 
+const checkScopes = permissions => jwtAuthz(permissions);
+
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true,
@@ -35,7 +37,6 @@ const checkJwt = jwt({
     jwksRequestsPerMinute: 5,
     jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`,
   }),
-
   audience: authConfig.audience,
   issuer: `https://${authConfig.domain}/`,
   algorithms: ["RS256"],
@@ -48,8 +49,18 @@ app.get("/api/external", checkJwt, (req, res) => {
 });
 
 app.get("/api/1", checkJwt, (req, res) => {
+  const requestedOrg = req.query.organizationID;
+  const currentOrg = req.user.org_id;
+  console.log("Asking for: " + requestedOrg + ' currentOrg: ' + currentOrg);
+  var message = "Asking for: " + requestedOrg;
+  if (requestedOrg === currentOrg) {
+    message = message + "\n1 - Your access token was successfully validated!";
+  } else {
+    message = message + "\n1 - You cannot use this endpoint with your current organization!";
+    res.status(403).send({ error: message });
+  }
   res.send({
-    msg: "1 - Your access token was successfully validated! - " + req.query.organizationID,
+    msg: message,
   });
 });
 
